@@ -107,18 +107,14 @@ export default function Home() {
           </div>
 
           {/* Estadísticas rápidas */}
-          <div className="grid grid-cols-3 gap-4 sm:gap-6 max-w-2xl mx-auto mt-8 sm:mt-12 animate-fade-in-up animation-delay-1000">
+          <div className="grid grid-cols-2 gap-8 sm:gap-12 max-w-lg mx-auto mt-8 sm:mt-12 animate-fade-in-up animation-delay-1000">
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-accent mb-1">1000+</div>
-              <div className="text-xs sm:text-sm text-gray-200">Restaurantes</div>
-            </div>
-            <div className="text-center border-x border-white/20">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-accent mb-1">32</div>
-              <div className="text-xs sm:text-sm text-gray-200">Estados</div>
+              <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-accent mb-1">32</div>
+              <div className="text-sm sm:text-base text-gray-200">Estados</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-accent mb-1">24/7</div>
-              <div className="text-xs sm:text-sm text-gray-200">Disponible</div>
+              <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-accent mb-1">24/7</div>
+              <div className="text-sm sm:text-base text-gray-200">Disponible</div>
             </div>
           </div>
         </div>
