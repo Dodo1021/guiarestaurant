@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Restaurant {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  address     String
+  phone       String
+  email       String?
+  website     String?
+  facebook    String?
+  instagram   String?
+  whatsapp    String?
+
+  estado      String
+  municipio   String
+  codigoPostal String?
+
+  categoria   String[]
+  precioPromedio String?
+  horarios    Json?
+
+  imagenes    String[]
+  logo        String?
+
+  destacado   Boolean @default(false)
+  activo      Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([estado, municipio])
+  @@index([categoria])
+  @@index([destacado])
+}
+
+model Estado {
+  id        String   @id @default(cuid())
+  nombre    String   @unique
+  codigo    String   @unique
+  municipios Municipio[]
+  createdAt DateTime @default(now())
+}
+
+model Municipio {
+  id        String   @id @default(cuid())
+  nombre    String
+  estadoId  String
+  estado    Estado   @relation(fields: [estadoId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([nombre, estadoId])
+  @@index([estadoId])
+}
