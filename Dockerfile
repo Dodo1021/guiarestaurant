@@ -34,9 +34,19 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/.package-lock.json ./node_modules/.package-lock.json
+
+# Seed dependencies
+RUN npm install --no-save tsx bcryptjs 2>/dev/null || true
+
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x entrypoint.sh
 
 RUN mkdir -p /app/public/uploads
 RUN chown -R nextjs:nodejs /app/public/uploads
+RUN chown -R nextjs:nodejs /app/node_modules
 
 USER nextjs
 
@@ -45,4 +55,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["./entrypoint.sh"]
