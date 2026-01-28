@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 
 interface AdminNavProps {
@@ -9,6 +10,10 @@ interface AdminNavProps {
 
 export default function AdminNav({ userEmail }: AdminNavProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/admin/login" });
+  };
 
   return (
     <nav className="bg-primary text-white shadow-lg">
@@ -34,14 +39,12 @@ export default function AdminNav({ userEmail }: AdminNavProps) {
           {/* Desktop User Info & Logout */}
           <div className="hidden md:flex items-center space-x-4">
             <span className="text-sm">{userEmail}</span>
-            <form action="/api/auth/signout" method="POST">
-              <button
-                type="submit"
-                className="bg-secondary hover:bg-secondary-dark px-4 py-2 rounded transition text-sm"
-              >
-                Cerrar sesión
-              </button>
-            </form>
+            <button
+              onClick={handleSignOut}
+              className="bg-secondary hover:bg-secondary-dark px-4 py-2 rounded transition text-sm"
+            >
+              Cerrar sesión
+            </button>
           </div>
 
           {/* Mobile Hamburger Button */}
@@ -82,14 +85,12 @@ export default function AdminNav({ userEmail }: AdminNavProps) {
             </Link>
             <div className="pt-2 border-t border-primary-dark">
               <p className="text-sm text-gray-300 px-3 mb-2">{userEmail}</p>
-              <form action="/api/auth/signout" method="POST">
-                <button
-                  type="submit"
-                  className="w-full bg-secondary hover:bg-secondary-dark px-3 py-2 rounded transition text-left"
-                >
-                  Cerrar sesión
-                </button>
-              </form>
+              <button
+                onClick={handleSignOut}
+                className="w-full bg-secondary hover:bg-secondary-dark px-3 py-2 rounded transition text-left"
+              >
+                Cerrar sesión
+              </button>
             </div>
           </div>
         )}
