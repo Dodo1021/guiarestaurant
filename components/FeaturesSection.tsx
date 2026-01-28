@@ -24,7 +24,7 @@ const features: Feature[] = [
   },
   {
     icon: "📱",
-    title: "100% Responsive",
+    title: "Multiplataforma",
     description: "Busca desde cualquier dispositivo, en cualquier lugar",
     color: "from-green-500 to-emerald-600",
   },
