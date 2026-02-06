@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
+const horarioSchema = z.object({
+  abierto: z.boolean(),
+  apertura: z.string(),
+  cierre: z.string(),
+});
+
 const registroSchema = z.object({
   // Datos del propietario
   ownerName: z.string().min(2, "Nombre requerido"),
@@ -23,6 +29,13 @@ const registroSchema = z.object({
   codigoPostal: z.string().optional(),
   categoria: z.array(z.string()).default([]),
   precioPromedio: z.string().optional(),
+  
+  // Horarios (JSON)
+  horarios: z.record(horarioSchema).optional(),
+  
+  // Imágenes
+  logo: z.string().url().optional().or(z.literal("")),
+  imagenes: z.array(z.string().url()).default([]),
 });
 
 export async function POST(request: NextRequest) {
@@ -61,8 +74,9 @@ export async function POST(request: NextRequest) {
         codigoPostal: data.codigoPostal || null,
         categoria: data.categoria,
         precioPromedio: data.precioPromedio || null,
-        imagenes: [],
-        logo: null,
+        horarios: data.horarios || null,
+        imagenes: data.imagenes,
+        logo: data.logo || null,
         destacado: false,
         activo: true,
         status: "pending", // ← Pendiente de aprobación
@@ -71,6 +85,9 @@ export async function POST(request: NextRequest) {
         ownerPhone: data.ownerPhone,
       },
     });
+
+    // TODO: Enviar email de confirmación al propietario
+    // TODO: Notificar a admin de nuevo registro pendiente
 
     return NextResponse.json(
       { 
