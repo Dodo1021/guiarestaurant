@@ -77,6 +77,8 @@ export default function RegistrarNegocioPage() {
   const [error, setError] = useState("");
   const [uploadingLogo, setUploadingLogo] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
+  const [honeypot, setHoneypot] = useState(""); // Campo trampa para bots
+  const [formStartTime] = useState(Date.now()); // Timestamp anti-bot
   
   const logoInputRef = useRef<HTMLInputElement>(null);
   const imagesInputRef = useRef<HTMLInputElement>(null);
@@ -191,6 +193,14 @@ export default function RegistrarNegocioPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Verificación anti-bot: si el formulario se llenó muy rápido (menos de 10 segundos)
+    const timeSpent = Date.now() - formStartTime;
+    if (timeSpent < 10000) {
+      setError("Por favor, toma tu tiempo para llenar el formulario correctamente.");
+      return;
+    }
+    
     setLoading(true);
     setError("");
 
@@ -198,7 +208,10 @@ export default function RegistrarNegocioPage() {
       const response = await fetch("/api/registrar-negocio", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          website2: honeypot, // Campo honeypot
+        }),
       });
 
       const data = await response.json();
@@ -321,6 +334,20 @@ export default function RegistrarNegocioPage() {
       {/* Form */}
       <div className="max-w-4xl mx-auto px-4 py-8">
         <form onSubmit={handleSubmit}>
+          {/* Honeypot - campo trampa invisible para bots */}
+          <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }} aria-hidden="true">
+            <label htmlFor="website2">No llenar este campo</label>
+            <input
+              type="text"
+              id="website2"
+              name="website2"
+              value={honeypot}
+              onChange={(e) => setHoneypot(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
+          
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 flex items-center gap-2">
               <span>⚠️</span> {error}
