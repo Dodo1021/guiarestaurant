@@ -33,13 +33,21 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <a
-              href="mailto:hola@guiarestaurant.com"
-              className="group relative bg-accent hover:bg-accent-light text-primary font-bold px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 text-xs sm:text-sm md:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-            >
-              <span className="relative z-10">Contacto</span>
-              <div className="absolute inset-0 bg-white rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
-            </a>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <a
+                href="/registrar-negocio"
+                className="group relative bg-white/10 hover:bg-white/20 text-white border border-white/30 font-bold px-3 sm:px-4 md:px-5 py-2 sm:py-2.5 rounded-lg transition-all duration-300 text-xs sm:text-sm shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                <span className="relative z-10">🏪 Registrar mi negocio</span>
+              </a>
+              <a
+                href="mailto:hola@guiarestaurant.com"
+                className="group relative bg-accent hover:bg-accent-light text-primary font-bold px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 rounded-lg transition-all duration-300 text-xs sm:text-sm md:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                <span className="relative z-10">Contacto</span>
+                <div className="absolute inset-0 bg-white rounded-lg opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              </a>
+            </div>
           </div>
         </div>
       </header>

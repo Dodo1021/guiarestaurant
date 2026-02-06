@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
 
     const where: any = {
       activo: true,
+      status: "approved", // Solo mostrar aprobados en la vista pública
     };
 
     if (estado) {
