@@ -33,14 +33,8 @@ const registroSchema = z.object({
   categoria: z.array(z.string().max(50)).max(5).default([]),
   precioPromedio: z.enum(["$", "$$", "$$$", "$$$$"]).optional(),
   
-  // Horarios - estructura específica
-  horarios: z.record(
-    z.object({
-      abierto: z.boolean(),
-      apertura: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/),
-      cierre: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/),
-    })
-  ).optional(),
+  // Horarios - se valida en el backend
+  horarios: z.any().optional(),
   
   // Imágenes - solo URLs de Cloudinary
   logo: z.string().url().max(500).optional().or(z.literal("")),
