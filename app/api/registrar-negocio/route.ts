@@ -2,12 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
-const horarioSchema = z.object({
-  abierto: z.boolean(),
-  apertura: z.string(),
-  cierre: z.string(),
-});
-
 const registroSchema = z.object({
   // Datos del propietario
   ownerName: z.string().min(2, "Nombre requerido"),
@@ -30,8 +24,8 @@ const registroSchema = z.object({
   categoria: z.array(z.string()).default([]),
   precioPromedio: z.string().optional(),
   
-  // Horarios (JSON)
-  horarios: z.record(horarioSchema).optional(),
+  // Horarios (JSON) - se guarda como objeto genérico
+  horarios: z.any().optional(),
   
   // Imágenes
   logo: z.string().url().optional().or(z.literal("")),
