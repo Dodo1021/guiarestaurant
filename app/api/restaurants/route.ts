@@ -10,10 +10,18 @@ export async function GET(request: NextRequest) {
     const municipio = searchParams.get("municipio");
     const search = searchParams.get("search");
 
-    // Parámetros de paginación
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "20");
+    // Parámetros de paginación (con límites de seguridad)
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
+    const limit = Math.min(50, Math.max(1, parseInt(searchParams.get("limit") || "20")));
     const skip = (page - 1) * limit;
+    
+    // Limitar búsqueda muy profunda (evitar queries pesados)
+    if (skip > 10000) {
+      return NextResponse.json(
+        { error: "Paginación fuera de rango" },
+        { status: 400 }
+      );
+    }
 
     const where: any = {
       activo: true,
@@ -44,15 +52,38 @@ export async function GET(request: NextRequest) {
     // Obtener total de resultados para paginación
     const total = await prisma.restaurant.count({ where });
 
-    // Obtener restaurantes con paginación
+    // Obtener restaurantes con paginación (excluir datos sensibles del propietario)
     const restaurants = await prisma.restaurant.findMany({
       where,
-      take: limit,
+      take: Math.min(limit, 50), // Máximo 50 por página para evitar abuso
       skip: skip,
       orderBy: [
         { destacado: "desc" },
         { createdAt: "desc" },
       ],
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        address: true,
+        phone: true,
+        email: true,
+        website: true,
+        facebook: true,
+        instagram: true,
+        whatsapp: true,
+        estado: true,
+        municipio: true,
+        codigoPostal: true,
+        categoria: true,
+        precioPromedio: true,
+        horarios: true,
+        imagenes: true,
+        logo: true,
+        destacado: true,
+        createdAt: true,
+        // NO incluir: ownerName, ownerEmail, ownerPhone, status, activo, updatedAt
+      },
     });
 
     // Retornar con metadata de paginación

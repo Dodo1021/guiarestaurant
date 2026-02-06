@@ -9,8 +9,38 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const restaurant = await prisma.restaurant.findUnique({
-      where: { id },
+    
+    // Solo mostrar restaurantes aprobados y activos en la vista pública
+    const restaurant = await prisma.restaurant.findFirst({
+      where: { 
+        id,
+        status: "approved",
+        activo: true,
+      },
+      // Excluir datos sensibles del propietario en respuesta pública
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        address: true,
+        phone: true,
+        email: true,
+        website: true,
+        facebook: true,
+        instagram: true,
+        whatsapp: true,
+        estado: true,
+        municipio: true,
+        codigoPostal: true,
+        categoria: true,
+        precioPromedio: true,
+        horarios: true,
+        imagenes: true,
+        logo: true,
+        destacado: true,
+        createdAt: true,
+        // NO incluir: ownerName, ownerEmail, ownerPhone, status, activo
+      },
     });
 
     if (!restaurant) {
